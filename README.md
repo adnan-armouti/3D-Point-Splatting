@@ -213,7 +213,9 @@ mm3DPS/                            # canonical 3DPS package
   rasterizer_factorized.py         # MIMO-factored rasterizer (paper default)
   bsdf_torch.py                    # ITU-material BSDF + Fresnel + reparam
   psf.py                           # Hann PSF table
-  train_frame_nvs.py               # canonical paper training entry point
+  train_frame_nvs.py               # paper training entry point
+  trainer.py                       # Trainer class: setup, step, evaluate, save
+  frame_dataset.py                 # per-loop training and test samples
   train_gaussian.py                # point initialization and rendering helpers
   pose_utils.py                    # per-loop pose interpolation helpers
   rerender_test_rp.py              # CRP/ADC complex re-render evaluator

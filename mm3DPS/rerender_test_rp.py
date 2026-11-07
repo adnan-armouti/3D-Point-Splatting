@@ -29,10 +29,11 @@ from mm3DPS.rasterizer import Rasterizer
 from mm3DPS.train_gaussian import (
     DEVICE, PointPrimitives, cull_gaussians, render_gaussians,
 )
-from mm3DPS.config import DEFAULT_DATA_ROOT, DEFAULT_OUTPUT_ROOT, default_split
+from mm3DPS.config import (
+    DEFAULT_DATA_ROOT, DEFAULT_OUTPUT_ROOT, default_split, load_trained_config,
+)
 from mm3DPS.pose_utils import apply_pose
-from mm3DPS.train_frame_nvs import _build_frame_poses
-from mm3DPS.config import load_trained_config
+from mm3DPS.frame_dataset import _build_frame_poses
 
 
 def parse_train_frames(s: str):

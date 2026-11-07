@@ -1,7 +1,7 @@
 """Pose helpers shared by the training entry points.
 
 These three helpers (per-frame anchor loader, per-loop pose
-interpolation, and applier) are imported by ``train_frame_nvs.py`` and
+interpolation, and applier) are imported by ``frame_dataset.py``, ``trainer.py`` and
 ``rerender_test_rp.py``.
 """
 
