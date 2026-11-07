@@ -33,6 +33,7 @@ if _REPO not in sys.path:
 
 from baselines.common import adapters as common  # noqa: E402
 from baselines.common import nvs_split  # noqa: E402
+from baselines.dart.adapter.v_ego import load_v_ego  # noqa: E402
 
 # Cascade virtual-array layout (mirrors mm3DPS/data/ra_utils.py:101-104).
 _CASCADE_RX = [(0, 0), (1, 0), (2, 0), (3, 0), (11, 0), (12, 0), (13, 0),
@@ -137,15 +138,7 @@ def _config_for_frame(scene: str, frame: int) -> str:
 
 def _v_ego_for_cascade_frame(scene: str, cascade_frame: int) -> np.ndarray:
     """Cascade frame's v_ego (refined, world frame, m/s)."""
-    cache_dir = os.path.join(nvs_split.DATA_ROOT, "v_ego_cache", scene)
-    refined_p = os.path.join(cache_dir, f"frame_{cascade_frame}_v_ego_refined.npy")
-    seed_p = os.path.join(cache_dir, f"frame_{cascade_frame}_v_ego.npy")
-    p = refined_p if os.path.isfile(refined_p) else seed_p
-    if not os.path.isfile(p):
-        raise FileNotFoundError(
-            f"v_ego cache missing for {scene} cascade frame {cascade_frame}"
-        )
-    return np.load(p).astype(np.float64)
+    return load_v_ego(scene, cascade_frame, nvs_split.DATA_ROOT).astype(np.float64)
 
 
 # ---------------------------------------------------------------------------

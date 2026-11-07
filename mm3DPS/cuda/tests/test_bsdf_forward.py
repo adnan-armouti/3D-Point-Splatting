@@ -11,11 +11,13 @@ Tolerances:
   enough to tolerate fma / --use_fast_math / intrinsics vs exact ops.
 """
 import math
+import os
 
 import pytest
 import torch
 
 from mm3DPS import cuda as v5cuda
+from mm3DPS.config import DEFAULT_DATA_ROOT
 from mm3DPS.cuda.reference import bsdf_step4_reference
 
 
@@ -30,6 +32,12 @@ pytestmark = pytest.mark.skipif(
 # Test helper: compute Steps 1-3 intermediates fresh, so we pass identical
 # inputs to both the reference and the kernel.
 # ---------------------------------------------------------------------------
+
+needs_data = pytest.mark.skipif(
+    not os.path.isdir(os.path.join(DEFAULT_DATA_ROOT, "seq_0_frame_135")),
+    reason="needs seq_0_frame_135 under data/ (see data/README.md)",
+)
+
 
 def compute_step123(scene="seq_0_frame_135", target_n=90000, seed=42):
     """Run render_factorized's Steps 1-3 and return the dict of tensors
@@ -183,6 +191,7 @@ def compute_step123(scene="seq_0_frame_135", target_n=90000, seed=42):
     )
 
 
+@needs_data
 def test_cuda_matches_float64_reference():
     """Compare the CUDA kernel against a float64 PyTorch reference.
 
@@ -251,6 +260,7 @@ def test_cuda_matches_float64_reference():
     )
 
 
+@needs_data
 def test_cuda_matches_pytorch_float32_reference():
     """Legacy test: CUDA vs the production float32 PyTorch path.
 

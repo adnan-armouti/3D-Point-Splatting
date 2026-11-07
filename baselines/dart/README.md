@@ -15,6 +15,22 @@ baselines/dart/
   UPSTREAM_COMMIT.txt   # pinned upstream commit
 ```
 
+## Ego velocity
+
+DART's pose input needs an ego velocity per frame. The values behind the paper's
+results ship in `adapter/v_ego_values.json`, so nothing needs to be generated.
+To regenerate them under `data/v_ego_cache/`:
+
+```bash
+python -m baselines.dart.adapter.v_ego --scene seq_0_frame_135         # seed, needs raw ColoRadar
+python -m baselines.dart.adapter.v_ego_refine --scene seq_0_frame_135  # search around the seed, GPU
+```
+
+Seeds reproduce the shipped values exactly. The search was originally run with a
+fused Doppler GPU kernel that this release replaces with a per-chirp loop, so
+7 of the 54 refined values come out slightly different, by at most 0.009 m/s,
+which is within the search's 0.01 m/s tolerance. DART uses the shipped values.
+
 ## Upstream
 
 `UPSTREAM_COMMIT.txt` pins the WiseLabCMU/dart commit. Apply

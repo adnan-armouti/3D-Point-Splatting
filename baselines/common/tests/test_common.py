@@ -32,6 +32,11 @@ if _REPO not in sys.path:
 
 from baselines.common import adapters, eval as common_eval, nvs_split
 
+needs_data = pytest.mark.skipif(
+    not all(os.path.isdir(nvs_split.scene_dir(s)) for s in nvs_split.BENCHMARK_SCENES),
+    reason="needs the six prepared scenes under data/ (see data/README.md)",
+)
+
 
 SCENE = "seq_0_frame_135"
 
@@ -51,6 +56,7 @@ def test_benchmark_scenes_are_the_paper_six():
     )
 
 
+@needs_data
 def test_scene_paths_exist():
     for s in nvs_split.BENCHMARK_SCENES:
         assert os.path.isdir(nvs_split.scene_dir(s)), f"missing scene dir: {s}"
@@ -61,6 +67,7 @@ def test_scene_paths_exist():
 # nvs_split.py
 # ---------------------------------------------------------------------------
 
+@needs_data
 def test_cascaded_split_matches_readme_for_seq_0_frame_135():
     split = nvs_split.cascaded_split(SCENE)
     assert split["test_frame"] == 135
@@ -73,6 +80,7 @@ def test_cascaded_split_matches_readme_for_seq_0_frame_135():
         assert os.path.isfile(p), p
 
 
+@needs_data
 def test_split_is_always_middle_frame_bracketed():
     # Test frame must be strictly between train frame range (interpolation,
     # never extrapolation).
@@ -87,6 +95,7 @@ def test_split_is_always_middle_frame_bracketed():
 # adapters.py
 # ---------------------------------------------------------------------------
 
+@needs_data
 def test_load_cascaded_adc_shape():
     sp = nvs_split.cascaded_split(SCENE)
     adc = adapters.load_cascaded_adc(sp["test_file"])
@@ -94,6 +103,7 @@ def test_load_cascaded_adc_shape():
     assert np.issubdtype(adc.dtype, np.complexfloating)
 
 
+@needs_data
 def test_pose_from_config_is_SE3_flu():
     sp = nvs_split.cascaded_split(SCENE)
     cfg = adapters.load_config(sp["test_config"])
@@ -107,6 +117,7 @@ def test_pose_from_config_is_SE3_flu():
     assert np.linalg.norm(t) < 1e4
 
 
+@needs_data
 def test_cascaded_adc_to_polar_ra_shape():
     sp = nvs_split.cascaded_split(SCENE)
     adc = adapters.load_cascaded_adc(sp["test_file"])
@@ -123,6 +134,7 @@ def test_range_crop_default_bins():
     np.testing.assert_array_equal(cropped, x[:, 15:110])
 
 
+@needs_data
 def test_adc_to_cart_ra_smoke():
     sp = nvs_split.cascaded_split(SCENE)
     adc = adapters.load_cascaded_adc(sp["test_file"])

@@ -298,10 +298,13 @@ ANY PATENT, TRADEMARK OR OTHER RIGHTS.
 ## Citation
 
 ```bibtex
-@inproceedings{armouti2026threedps,
-  title     = {{3D} Point Splatting for {mmWave} Radar Novel View Synthesis},
-  author    = {Armouti, Adnan and Gao, Yixuan and Nandakumar, Rajalakshmi},
-  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
-  year      = {2026}
+@misc{armouti20263dpointsplattingmmwave,
+      title={3D Point Splatting for mmWave Radar Novel View Synthesis}, 
+      author={Adnan Armouti and Yixuan Gao and Rajalakshmi Nandakumar},
+      year={2026},
+      eprint={2609.11894},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2609.11894}, 
 }
 ```
