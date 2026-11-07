@@ -1,0 +1,7 @@
+{
+  "config_file": "data/alignment_data/seq_2_frame_300/cascade/cascaded_frame_300_aligned_pass2.json",
+  "scene_file": "data/seq_2_frame_300/scene/mesh.ply",
+  "gt_adc_file": "data/seq_2_frame_300/radar/cascaded_frame_300.npy",
+  "tx_pattern_file": "assets/antenna_pattern/MMWCAS/tx1_76.npy",
+  "rx_pattern_file": "assets/antenna_pattern/MMWCAS/rx1_76.npy"
+}

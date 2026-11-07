@@ -1,0 +1,25 @@
+# Upstream clones (pinned via UPSTREAM_COMMIT.txt; recreate with git clone)
+*/upstream/
+
+# Regeneratable adapter outputs and training results (multi-GB)
+*/data_radarsplat/
+*/data_radarfields/
+*/data_dart/
+*/upstream_results/
+
+# Intermediate per-scene arrays (regeneratable from checkpoints)
+**/results/**/*.npy
+
+# DART writes per-epoch checkpoints under results/<scene>/checkpoints/ (1800
+# files per Phase-4 run); only the final state we serve from `model/` matters.
+**/results/**/checkpoints/
+
+# DART/JAX writes a `model/` pickle alongside checkpoints; keep metrics + figs
+# but skip the multi-MB serialized state.
+**/results/**/model
+**/results/**/model.npz
+**/results/**/metadata.npz
+
+# Python bytecode
+__pycache__/
+*.pyc

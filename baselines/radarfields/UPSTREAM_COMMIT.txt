@@ -1,0 +1,5 @@
+upstream repo:   https://github.com/princeton-computational-imaging/RadarFields
+default branch:  main
+HEAD at clone:   ee76d76570f58b3d8539eafd7df0c188b58af333
+HEAD date:       2024-09-11
+HEAD subject:    code release

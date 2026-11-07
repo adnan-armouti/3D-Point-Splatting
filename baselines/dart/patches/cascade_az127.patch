@@ -1,0 +1,39 @@
+diff --git a/dart/components/antenna.py b/dart/components/antenna.py
+index d912261..6b039cc 100644
+--- a/dart/components/antenna.py
++++ b/dart/components/antenna.py
+@@ -41,3 +41,34 @@ def awr1843boost_az8(
+             jnp.sum(jnp.exp(jnp.outer(-1j * n, w - bin)), 0)) / 8
+ 
+     return jax.vmap(column)(n).T.reshape(1, -1, 8)
++
++
++def cascade_az127(
++    theta: Float32[Array, "k"], phi: Float32[Array, "k"]
++) -> Float32[Array, "1 k 127"]:
++    """Compute 127 antenna gains for 127 azimuth bins of the TI MMWCAS cascade.
++
++    Mirrors the structure of ``awr1843boost_az8`` but for the cascade's
++    86-element row-0 virtual array (12 TX × 16 RX, half-lambda spacing).
++    Beamforms to 127 bins matching 3DPS's RA convention
++    (128-pt FFT, drop bin 0, fftshift).
++
++    Per-element single-antenna gain uses ``awr1843boost`` as a 77 GHz
++    approximation; the MMWCAS spec is similar in the main lobe.
++    """
++    gain = awr1843boost(theta, phi).reshape(-1)        # (k,)
++
++    w = jnp.sin(-phi) * jnp.pi                          # (k,)
++    n = jnp.arange(86)                                  # 86 virtual elements
++    n_az = 127                                          # output bins
++    n_fft = 128                                         # 128-pt FFT, drop bin 0
++
++    def column(b):
++        # Steering bin b ∈ [0, 127): mirrors 3DPS's fftshift+drop-bin-0
++        # convention. Bin b corresponds to sin(angle) = (b - (n_az-1)/2) * 2/n_fft.
++        sin_steer = (b - (n_az - 1) / 2.0) * 2.0 / n_fft
++        bin_phase = sin_steer * jnp.pi
++        return gain * jnp.abs(
++            jnp.sum(jnp.exp(jnp.outer(-1j * n, w - bin_phase)), 0)) / n.shape[0]
++
++    return jax.vmap(column)(jnp.arange(n_az)).T.reshape(1, -1, n_az)

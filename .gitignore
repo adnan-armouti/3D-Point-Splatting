@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.so
+build/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# Data, outputs and trained models are not part of the code release
+data/*
+!data/README.md
+output/
+checkpoints/
+*.pt
+*.pth

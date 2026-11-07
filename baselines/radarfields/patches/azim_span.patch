@@ -1,0 +1,48 @@
+diff --git a/radarfields/sampler.py b/radarfields/sampler.py
+index 5606ee2..08d5786 100644
+--- a/radarfields/sampler.py
++++ b/radarfields/sampler.py
+@@ -12,7 +12,7 @@ def get_azimuths(B, N, num_azimuths, device, all=False):
+     else: azim_samples = torch.sort(torch.randint(0, num_azimuths, (B, N), device=device))[0]
+     return azim_samples # [B, N]
+ 
+-def get_radar_rays(poses, intrinsics_radar, num_azimuths, N, num_fov_samples, azim_samples, device):
++def get_radar_rays(poses, intrinsics_radar, num_azimuths, N, num_fov_samples, azim_samples, device, azim_span_deg=360.0):
+     '''
+     ## Given radar poses & azimuth samples, sample world-coordinate ray origins and directions
+     :param poses (torch.Tensor): radar2world matrices
+@@ -21,6 +21,9 @@ def get_radar_rays(poses, intrinsics_radar, num_azimuths, N, num_fov_samples, az
+     :param N (int): number of azimuth samples
+     :param num_fov_samples (int): number of cone super-samples per azimuth beam
+     :param azim_samples (torch.Tensor): sampled azimuth angles
++    :param azim_span_deg (float): angular span of the radar's azimuth coverage
++        in degrees (default 360 for spinning radar; pass 180 for the cascade
++        forward wedge after sin->uniform-angle resampling).
+     # '''
+     B = poses.shape[0] # [B, 4, 4]
+     S = num_fov_samples # num of ray super-samples within radar beam
+@@ -29,7 +32,7 @@ def get_radar_rays(poses, intrinsics_radar, num_azimuths, N, num_fov_samples, az
+     rays = {}
+ 
+     # Convert sampled azimuth angles to degrees & expand
+-    azim_degrees = (360.0/num_azimuths) * azim_samples # [B, N] NOTE: we rotate clockwise
++    azim_degrees = (azim_span_deg/num_azimuths) * azim_samples # [B, N] NOTE: we rotate clockwise
+     azim_degrees = azim_degrees.repeat_interleave(num_fov_samples, dim=1) # [B, N*S]
+ 
+     # Convert azimuth samples into roll, pitch, yaw, with roll and pitch set to 0
+@@ -96,13 +99,14 @@ def get_points(data_batch, args, device):
+     R = data_batch["num_range_samples"]
+     intrinsics = data_batch["intrinsics"]
+     total_azimuths = args.intrinsics_radar["num_azimuths_radar"]
++    azim_span_deg = float(args.intrinsics_radar.get("azim_span_deg", 360.0))
+     poses = data_batch["poses"] # [B, 4, 4] radar2world matrices
+     azimuths = data_batch["azimuths"] # [B, N] azimuth samples
+     ranges = data_batch["ranges"] # [B, N*S, R] range bin samples
+ 
+     # Given radar poses & samples, compute ray origins and directions
+     rays = get_radar_rays(poses, intrinsics, total_azimuths,
+-        N, S, azimuths, device)
++        N, S, azimuths, device, azim_span_deg=azim_span_deg)
+ 
+     # Sampled ray origin and direction vectors
+     origins = rays["origins"] # [B, N*S, 3]

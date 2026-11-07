@@ -1,0 +1,8 @@
+upstream repo:   https://github.com/umautobots/radarsplat
+default branch:  release
+HEAD at clone:   ea9c8f530c708622cc3b1b560436b5557ac6a49b
+HEAD date:       2026-02-10
+HEAD subject:    Default to --eval_set all in render mode
+
+gsplat submodule: pinned via umautobots fork (modified with _radar_rasterization).
+glm submodule:    33b4a621a697a305bc3a7610d290677b96beb181
