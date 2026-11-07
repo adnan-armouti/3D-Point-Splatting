@@ -222,7 +222,8 @@ mm3DPS/                            # canonical 3DPS package
   frame_nvs_report.py              # NVS metrics aggregation
   cuda/                            # CUDA extension, required for training
   data/                            # ADC↔RA, range resolution and ADC loading
-  evaluation/eval_crp_adc.py       # CRP/ADC evaluation
+  evaluation/eval_crp_adc.py       # CRP/ADC evaluation driver
+  evaluation/crp_adc_metrics.py    # CRP/ADC phase correction and metrics
   evaluation/utils/                # metrics and visualization helpers
   preprocessing/                   # ColoRadar -> data/ pipeline + alignment
     preproc.py                     #   top-level driver (adc / configs / lidar / mesh)
