@@ -4,7 +4,7 @@ Builds DART's cfg dict programmatically (mirror of upstream train.py) for
 the ``ngpsh`` field, runs ``script_train``, then loads the checkpoint and
 renders the held-out test frame's pose via ``dart.render``. The rendered
 RDA cube is reduced to RA (sum over Doppler, matching upstream radar
-conventions) and dumped to ``rendered_ra_polar.npy``. ``finalize_metrics``
+conventions) and dumped to ``rendered_ra_polar.npy``. ``baselines.common.finalize``
 (mm3DPS env) computes the metrics from there.
 """
 
@@ -209,9 +209,9 @@ def run(scene: str, data_root: str, out_dir: str,
     # Finalize in mm3DPS env.
     import subprocess
     py = os.environ.get("MM3DPS_PYTHON", "python")
-    finalize = os.path.join(_HERE, "finalize_metrics.py")
     subprocess.run(
-        [py, finalize, "--out-dir", out_dir, "--baseline-name", "dart"],
+        [py, "-m", "baselines.common.finalize", "--baseline", "dart",
+         "--out-dir", out_dir, "--baseline-name", "dart"],
         cwd=_REPO,
         check=True,
     )

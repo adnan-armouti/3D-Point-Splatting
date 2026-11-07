@@ -174,12 +174,12 @@ product-agnostic evaluation (Table 2).
 See [baselines/README.md](baselines/README.md) for the per-baseline
 operational guide. Briefly:
 
-- **DART** — `python -m baselines.dart.runner.run_all_scenes --gpus 0 1`
-- **RadarFields** — `python -m baselines.radarfields.runner.run_all_scenes --gpus 0 1`
-- **RadarSplat** — `python -m baselines.radarsplat.runner.run_all_scenes --gpus 0 1`
+- **DART** — `python -m baselines.common.runner --baseline dart --gpus 0 1`
+- **RadarFields** — `python -m baselines.common.runner --baseline radarfields --gpus 0 1`
+- **RadarSplat** — `python -m baselines.common.runner --baseline radarsplat --gpus 0 1`
 
-Each driver starts the actual training under each
-baseline's own conda env, then runs `finalize_metrics.py` (under the
+The driver starts the actual training under each
+baseline's own conda env, then runs `baselines.common.finalize` (under the
 mm3DPS env) to apply the 3DPS metrics so all four
 methods produce comparable numbers. Set `DART_PYTHON`, `RADARFIELDS_PYTHON`
 and `RADARSPLAT_PYTHON` to each baseline environment's Python.
@@ -192,7 +192,7 @@ See [tables/README.md](tables/README.md) for the script-by-script table
 mapping. Inputs:
 
 - Your training runs under `output/training/`.
-- Per-baseline `metrics.json` produced by each baseline's `run_all_scenes.py`.
+- Per-baseline `metrics.json` produced by `baselines.common.runner`.
 - The CRP/ADC evaluation output under `output/crp_adc_eval/`.
 
 ---
@@ -229,7 +229,7 @@ mm3DPS/                            # canonical 3DPS package
     alignment/                     #   cascade alignment (pass-1 + pass-2)
 
 baselines/
-  common/                          # shared scene list, NVS split, eval harness
+  common/                          # scene list, NVS split, all-scenes runner, metric step
   dart/                            # WiseLabCMU/dart adapter + runner + patches
   radarfields/                     # princeton-computational-imaging/RadarFields
   radarsplat/                      # umautobots/radarsplat

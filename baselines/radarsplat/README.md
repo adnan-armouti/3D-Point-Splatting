@@ -11,7 +11,7 @@ held-out test frame.
 baselines/radarsplat/
   adapter/              # mm3DPS -> RadarSplat per-scene dataset (TUM poses + GT)
   patches/              # local patches against the upstream commit
-  runner/               # per-scene driver + all-scenes driver + finalize_metrics
+  runner/               # per-scene training driver
   UPSTREAM_COMMIT.txt   # pinned upstream commit
 ```
 
@@ -36,10 +36,10 @@ python -m baselines.radarsplat.runner.run_radarsplat_scene \
        --scene seq_0_frame_135 --epochs 7000
 
 # All six scenes:
-python -m baselines.radarsplat.runner.run_all_scenes --gpus 0 1
+python -m baselines.common.runner --baseline radarsplat --gpus 0 1
 ```
 
-The runner writes `results/<scene>/` and spawns `finalize_metrics.py`
+The runner writes `results/<scene>/` and spawns `baselines.common.finalize`
 (mm3DPS env) for the metric step.
 
 ## Deviations from upstream

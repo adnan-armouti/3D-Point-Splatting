@@ -11,7 +11,7 @@ held-out test frame.
 baselines/radarfields/
   adapter/              # mm3DPS -> RadarFields per-scene config
   patches/              # local patches against the upstream commit
-  runner/               # per-scene driver + all-scenes driver + finalize_metrics
+  runner/               # per-scene training driver
   UPSTREAM_COMMIT.txt   # pinned upstream commit
 ```
 
@@ -36,10 +36,10 @@ python -m baselines.radarfields.runner.run_radarfields_scene \
        --scene seq_0_frame_135 --epochs 5000
 
 # All six scenes:
-python -m baselines.radarfields.runner.run_all_scenes --gpus 0 1
+python -m baselines.common.runner --baseline radarfields --gpus 0 1
 ```
 
-The runner writes `results/<scene>/` and spawns `finalize_metrics.py`
+The runner writes `results/<scene>/` and spawns `baselines.common.finalize`
 (mm3DPS env) for the metric step.
 
 ## Deviations from upstream

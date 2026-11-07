@@ -316,7 +316,7 @@ def build_scene(scene: str, out_root: str) -> dict:
         adc = common.load_cascaded_adc(frame_to_adcpath[frame])
 
         # Polar RA → uniform-angle resample → uint8 → PNG
-        ra_sin = common.adc_to_polar_ra(adc, sensor="cascaded")       # (127, 256)
+        ra_sin = common.adc_to_polar_ra(adc)       # (127, 256)
         ra_ang = resample_polar_sin_to_angle(ra_sin, H_fov=H_FOV)     # (H_FOV, 256)
         img = _normalize_to_uint8(ra_ang)
         fname = f"{frame:05d}.png"

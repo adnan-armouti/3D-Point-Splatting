@@ -54,17 +54,17 @@ python -m baselines.dart.runner.run_dart_scene --scene seq_0_frame_135 \
 The all-scenes driver runs all six paper scenes across two GPUs:
 
 ```bash
-python -m baselines.dart.runner.run_all_scenes --gpus 0 1
+python -m baselines.common.runner --baseline dart --gpus 0 1
 ```
 
 The runner writes `results/<scene>/` containing `train_meta.json`,
-`rendered_ra_polar.npy`, then spawns `finalize_metrics.py` (mm3DPS env)
+`rendered_ra_polar.npy`, then spawns `baselines.common.finalize` (mm3DPS env)
 which produces `metrics.json` + the four RA inspection PNGs (linear / dB
 on the GT and rasterized images).
 
 ## Aggregate
 
-`run_all_scenes.py` writes `results/aggregate.json`:
+The all-scenes driver writes `results/aggregate.json`:
 
 ```json
 {

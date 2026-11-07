@@ -83,7 +83,7 @@ from gsplat.strategy import DefaultStrategy  # noqa: E402
 # Our shared modules — NOTE: cannot import baselines.common.adapters here
 # because mm3DPS/data/ra_utils.py uses PEP-604 ``float | None`` at class level
 # which Python 3.9 (radarsplat env) cannot evaluate. Metric finalization is
-# run as a subprocess under the mm3DPS env via finalize_metrics.py.
+# run as a subprocess under the mm3DPS env via baselines.common.finalize.
 from baselines.common import nvs_split  # noqa: E402
 
 
@@ -211,7 +211,7 @@ def _render_train_frames(runner: Runner, train_frame_numbers) -> dict:
     return out
 
 
-# (GT-side + metric computation live in finalize_metrics.py which runs in
+# (GT-side + metric computation live in baselines.common.finalize which runs in
 # the mm3DPS env — see top-of-file comment.)
 
 
@@ -302,9 +302,9 @@ def run(
     # Spawn metric finalization under mm3DPS env.
     import subprocess
     py = os.environ.get("MM3DPS_PYTHON", "python")
-    finalize = os.path.join(_HERE, "finalize_metrics.py")
-    proc = subprocess.run(
-        [py, finalize, "--out-dir", out_dir, "--baseline-name", baseline_name],
+    subprocess.run(
+        [py, "-m", "baselines.common.finalize", "--baseline", "radarsplat",
+         "--out-dir", out_dir, "--baseline-name", baseline_name],
         cwd=_REPO,
         check=True,
     )

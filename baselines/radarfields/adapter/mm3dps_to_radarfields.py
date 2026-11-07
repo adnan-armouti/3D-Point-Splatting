@@ -207,7 +207,7 @@ def build_scene(scene: str) -> dict:
     for k, frame in enumerate(frames):
         # 1. Load ADC, polar, resample to uniform-angle, normalize, write PNG.
         adc = common.load_cascaded_adc(frame_to_adc[frame])
-        ra_sin = common.adc_to_polar_ra(adc, sensor="cascaded")     # (127, 256)
+        ra_sin = common.adc_to_polar_ra(adc)     # (127, 256)
         ra_ang = resample_polar_sin_to_angle(ra_sin, H_fov=H_AZ)    # (200, 256)
         png_name = f"{frame:05d}.png"
         _write_radarfields_png(ra_ang, os.path.join(radar_dir, png_name))

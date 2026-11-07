@@ -28,7 +28,7 @@ Plus a parallel per-scene aggregate:
 
 This module is intended to be importable from the mm3DPS env (the env where
 ``compute_cart_ra_metrics`` lives) — i.e. it is callable from each
-baseline's ``finalize_metrics.py`` and from ``mm3DPS.train_frame_nvs``.
+``baselines.common.finalize`` and from the 3DPS trainer.
 """
 
 from __future__ import annotations
@@ -46,7 +46,7 @@ def _save_ra_pngs(ra_cart: np.ndarray, out_dir: str, prefix: str,
 
     Uses ``mm3DPS.evaluation.utils.visualization.save_ra_cartesian_png`` so the
     rendering style matches the test-frame figures saved by each baseline's
-    ``finalize_metrics.py``.
+    ``baselines.common.finalize``.
     """
     from mm3DPS.evaluation.utils.visualization import save_ra_cartesian_png
 

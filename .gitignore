@@ -14,3 +14,9 @@ output/
 checkpoints/
 *.pt
 *.pth
+
+# Baseline upstream code, adapter data and results
+baselines/*/upstream/
+baselines/*/upstream_results/
+baselines/*/results/
+baselines/*/data_*/

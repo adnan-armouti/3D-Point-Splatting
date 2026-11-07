@@ -4,7 +4,7 @@ Each script regenerates a table that appears in the paper. Scripts assume
 they are invoked from the repo root with the mm3DPS package importable, your
 training runs under `output/training/`, and the per-baseline
 `results/<scene>/metrics.json` files produced by
-`baselines/<name>/runner/run_all_scenes.py`.
+`baselines.common.runner`.
 
 ## Tables (.tex)
 
@@ -20,7 +20,7 @@ training runs under `output/training/`, and the per-baseline
 
 - `output/training/<scene>_<tag>/best_model.pt`: your trained scenes.
 - `baselines/<name>/results/<scene>/metrics.json` — produced by each baseline's
-  `runner/run_all_scenes.py`. Generate these before running the comparison
+  `baselines.common.runner`. Generate these before running the comparison
   tables.
 - `output/crp_adc_eval/<scene>/{crp,adc}_{pred_corr,gt}.npy` — produced by
   `mm3DPS.evaluation.eval_crp_adc` for the CRP/ADC product-agnostic

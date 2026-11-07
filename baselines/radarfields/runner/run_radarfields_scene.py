@@ -3,7 +3,7 @@
 Drives upstream's ``main.py`` (train + auto-test) with our
 ``preprocess_file`` and intrinsics overrides, then captures the rendered
 ``pred_fft`` for the held-out test frame via a small ``save_figures``
-monkey-patch. ``finalize_metrics.py`` (mm3DPS env) computes the v6/v7-style
+monkey-patch. ``baselines.common.finalize`` (mm3DPS env) computes the 3DPS
 metrics from the saved polar.
 """
 
@@ -42,7 +42,7 @@ def _patched_test_epoch(self, loader):
     """Custom test loop that ALSO saves pred_fft.npy for the test frame.
 
     Equivalent to upstream's logic for visualization but additionally
-    dumps the raw rendered FFT polar (uniform-angle) so finalize_metrics
+    dumps the raw rendered FFT polar (uniform-angle) so baselines.common.finalize
     can run the canonical mm3DPS polar→cart pipeline against it.
 
     When ``RF_TRAIN_DUMP_DIR`` is set (instead of ``RF_DUMP_DIR``), this
@@ -101,7 +101,7 @@ def _patched_test_epoch(self, loader):
                 self.log(f"  saved rendered_ra_polar.npy shape={p.shape} to {dump_dir}")
 
             # Skip upstream's heavy save_figures (PNG matplotlib renders we
-            # don't need; finalize_metrics produces the canonical PNGs).
+            # don't need; baselines.common.finalize produces the canonical PNGs).
     self.log("++> Test done.")
 
 
@@ -320,9 +320,9 @@ def run(scene: str, out_dir: str, workspace: str, max_iters: int) -> dict:
     # Spawn metric finalization under mm3DPS env.
     import subprocess
     py = os.environ.get("MM3DPS_PYTHON", "python")
-    finalize = os.path.join(_HERE, "finalize_metrics.py")
     subprocess.run(
-        [py, finalize, "--out-dir", out_dir, "--baseline-name", "radarfields"],
+        [py, "-m", "baselines.common.finalize", "--baseline", "radarfields",
+         "--out-dir", out_dir, "--baseline-name", "radarfields"],
         cwd=_REPO,
         check=True,
     )

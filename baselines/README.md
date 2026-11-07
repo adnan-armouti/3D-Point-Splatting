@@ -41,7 +41,7 @@ The shared infrastructure that every baseline imports lives under
 - `common/eval.py` — `run_eval(...)` produces the canonical
   `metrics.json` schema.
 - `common/train_frames_io.py` — shared per-train-frame artefact writer
-  (used by all three baselines' `finalize_metrics.py`).
+  (used by `common/finalize.py`).
 
 ---
 
@@ -64,7 +64,7 @@ Every `metrics.json` follows the same schema produced by
 }
 ```
 
-all-scenes drivers (`runner/run_all_scenes.py` in each baseline) write a per-
+The all-scenes driver (`common/runner.py`) writes a per-
 baseline `aggregate.json` summarising mean/stdev across the six paper
 scenes.
 
@@ -89,17 +89,17 @@ Per-baseline:
 
 ```bash
 # DART (cascade)
-python -m baselines.dart.runner.run_all_scenes --gpus 0 1
+python -m baselines.common.runner --baseline dart --gpus 0 1
 
 # RadarFields
-python -m baselines.radarfields.runner.run_all_scenes --gpus 0 1
+python -m baselines.common.runner --baseline radarfields --gpus 0 1
 
 # RadarSplat
-python -m baselines.radarsplat.runner.run_all_scenes --gpus 0 1
+python -m baselines.common.runner --baseline radarsplat --gpus 0 1
 ```
 
 `MM3DPS_PYTHON` should point at the env that has `mm3DPS` importable
-(used by each runner to spawn `finalize_metrics.py` for the metric step).
+(used by each runner to spawn `baselines.common.finalize` for the metric step).
 The training step itself runs in each baseline's own env.
 
 ---

@@ -17,7 +17,6 @@ Reads:
          cart_mse.mean/std, cart_rmse.mean/std)
   - baselines/{dart,radarsplat,radarfields}/results/<scene>/metrics.json
         (ra_corr, cart_mse, cart_rmse, cart_psnr, cart_ssim)
-        For DART, also __cascaded variant.
 
 Usage:
     python -m tables.generate_tables \
@@ -131,11 +130,7 @@ def load_ours_train_metrics(scene: str, ours_dir: str) -> Optional[dict]:
 
 def load_baseline_metrics(baseline: str, scene: str, baselines_dir: str
                            ) -> Optional[dict]:
-    if baseline == 'dart':
-        p = os.path.join(baselines_dir, 'dart', 'results',
-                          f'{scene}__cascaded', 'metrics.json')
-    else:
-        p = os.path.join(baselines_dir, baseline, 'results', scene, 'metrics.json')
+    p = os.path.join(_baseline_scene_dir(baseline, scene, baselines_dir), 'metrics.json')
     if not os.path.exists(p):
         return None
     with open(p) as f:
@@ -150,9 +145,11 @@ def load_baseline_metrics(baseline: str, scene: str, baselines_dir: str
 
 
 def _baseline_scene_dir(baseline: str, scene: str, baselines_dir: str) -> str:
-    if baseline == 'dart':
-        return os.path.join(baselines_dir, 'dart', 'results', f'{scene}__cascaded')
-    return os.path.join(baselines_dir, baseline, 'results', scene)
+    path = os.path.join(baselines_dir, baseline, 'results', scene)
+    # Runs made for the paper's DART results carry a __cascaded suffix.
+    if not os.path.isdir(path) and os.path.isdir(f'{path}__cascaded'):
+        return f'{path}__cascaded'
+    return path
 
 
 def load_baseline_train_metrics(baseline: str, scene: str, baselines_dir: str
